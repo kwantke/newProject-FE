@@ -5,6 +5,7 @@ const Header = props => {
      _back
     ,_search
   } = props
+
   return (
     <>
       <ContentBgArea>
