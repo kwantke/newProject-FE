@@ -9,6 +9,7 @@ In the project directory, you can run:
 설치 파일 
 npm install universal-cookie
 npm install axios
+npm install styled-components
 ### `npm start`
 
 Runs the app in the development mode.\
