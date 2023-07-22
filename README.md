@@ -10,6 +10,7 @@ In the project directory, you can run:
 npm install universal-cookie
 npm install axios
 npm install styled-components
+npm i react-i18next i18next
 ### `npm start`
 
 Runs the app in the development mode.\

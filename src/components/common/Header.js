@@ -4,11 +4,12 @@ const Header = props => {
   const {
      _back
     ,_search
+    ,_onTop
   } = props
 
   return (
     <>
-      <ContentBgArea>
+      <ContentBgArea OnTop={_onTop}>
 
 
       </ContentBgArea>
@@ -33,3 +34,5 @@ const ContentBgArea = styled.div`
   top: 0;
   background-color: ${props => (props.OnTop ? '' :  '#fff')};
 `;
+
+export default Header;

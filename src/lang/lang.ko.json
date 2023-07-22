@@ -1,0 +1,14 @@
+{
+   "test": "한국어 테스트"
+  ,"loginPage": {
+     "headerSubTitle": "로그인"
+    ,"loginEmail": "이메일"
+    ,"loginPassword": "비밀번호"
+    ,"loginPlaceholder": [
+         "이메일 주소를 입력해 주세요"
+        ,"비밀번호를 입력해주세요"
+      ]
+
+}
+
+}
