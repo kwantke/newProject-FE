@@ -14,12 +14,36 @@ const Login = () => {
     email: ''
     ,passowrd: ''
   });
+  const [emailError, setEmailError] = useState('');
+  const [passError, setPassError] = useState('');
 
   const onChange = e => {
     setLoginInfo({
       ...loginInfo
       ,[e.target.name]: e.target.value
     });
+  }
+
+  /* 서버에 전달할 정보 */
+  const userInfo = {
+    email: loginInfo.email
+    ,password: loginInfo.passowrd
+  }
+  /* 로그인 제출 */
+  const submitUserInfo = () => {
+    if(userInfo.email.length !== 0) {
+      setEmailError('');
+    }
+    if(userInfo.email === '') {
+      return setEmailError(t('loginPage.loginerrMessage.0'));
+    }
+    if(userInfo.password.length !== 0) {
+      setPassError('');
+    }
+    if(userInfo.password.length == 0) {
+      return setPassError(t('loginPage.loginerrMessage.1'));
+    }
+    dispatch
   }
   return (
     <>
