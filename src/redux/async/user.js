@@ -3,9 +3,10 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import {
   addUser
-  ,login
+  ,logIn
 } from '../../shared/api/userApi'
-//히원등록
+import {setCommonModalOn} from "../modules/commonSlice";
+//회원등록
 export const addUserDB = createAsyncThunk(
   'user/addUser'
   ,async (data, thunkAPI) => {
@@ -16,13 +17,13 @@ export const addUserDB = createAsyncThunk(
           title: '회원가입에 성공하셨습니다'
           ,goPage: '/login'
         };
-        thunkAPI.dispatch();
+        thunkAPI.dispatch(setCommonModalOn(modalParams));
       }
     } catch (err) {
-      const modalParams = {
+      /*const modalParams = {
         title: `${err.response.data.errMsg}`
-      };
-      thunkAPI.dispatch();
+      };*/
+      //thunkAPI.dispatch();
       return thunkAPI.rejectWithValue('<<',err)
 
     }
@@ -30,5 +31,21 @@ export const addUserDB = createAsyncThunk(
 );
 
 export const loginDB = createAsyncThunk(
+  'user/logIn'
+  ,async (data, thunkAPI) => {
+    try {
+      const response = await logIn(data);
+      if(response) {
+        const USER_TOKEN = response.data.token;
 
-)
+      }
+    } catch (err) {
+      console.log('error ::::::', err.response);
+      const modalParams = {
+        title: `${err.response.data.errMsg}`,
+      }
+      thunkAPI.dispatch(setCommonModalOn(modalParams));
+      return thunkAPI.rejectWithValue('<<',err);
+    }
+  }
+);

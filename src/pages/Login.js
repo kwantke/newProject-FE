@@ -6,9 +6,11 @@ import styled from "styled-components";
 import Label from "../elements/Label";
 import {useState} from "react";
 import {xcircle} from "../images";
+import {useDispatch} from "react-redux";
+import {loginDB} from "../redux/async/user";
 
 const Login = () => {
-
+  const dispatch = useDispatch();
   const { t } = useTranslation();
   const [loginInfo, setLoginInfo] = useState({
     email: ''
@@ -43,7 +45,7 @@ const Login = () => {
     if(userInfo.password.length == 0) {
       return setPassError(t('loginPage.loginerrMessage.1'));
     }
-    dispatch
+    dispatch(loginDB(userInfo));
   }
   return (
     <>
@@ -69,6 +71,9 @@ const Login = () => {
                 }}
                 />
             )}
+            {/*<Text fontSize="12px" color="#ff4949">
+              {emailError}
+            </Text>*/}
           </Wrap>
         </Grid>
       </Container>
@@ -80,4 +85,12 @@ const Login = () => {
 const Wrap = styled.div`
   margin-bottom: 32px;
   position: relative;
+`;
+
+const CloseButton = styled.img`
+  position: absolute;
+  right: 11px;
+  bottom: 17px;
+  width: 20px;
+  cursor: pointer;
 `;
