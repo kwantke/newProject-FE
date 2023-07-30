@@ -3,11 +3,15 @@
   ,"loginPage": {
      "headerSubTitle": "로그인"
     ,"loginEmail": "이메일"
-    ,"loginPassword": "비밀번호"
-    ,"loginPlaceholder": [
-         "이메일 주소를 입력해 주세요"
-        ,"비밀번호를 입력해주세요"
-      ]
+    ,"loginPassword": "비밀번호",
+    "loginPlaceholder": [
+      "이메일 주소를 입력해 주세요",
+      "비밀번호를 입력해주세요"
+    ],
+    "loginerrMessage": ["이메일을 입력해주세요!", "비밀번호를 입력해주세요!"],
+    "login": "로그인하기",
+    "or": "또는",
+    "kakaoLogin": "카카오 로그인하기"
 
 }
 

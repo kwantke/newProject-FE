@@ -4,57 +4,24 @@ import detector from 'i18next-browser-languagedetector';
 import langEn from './lang.en.json';
 import langKo from './lang.ko.json';
 
-const resource = {
-  'en-US': {
-    translation: langEn,
+const resources = {
+  en: {
+    translation: langEn
   },
-  'ko-KR': {
-    translation: langKo,
-  },
-};
-
-const getThisLang = () => {
-  let lang = 'ko-KR';
-  const wLang = window.navigator.language;
-  if (wLang !== 'ko-KR' && wLang !== 'ko') lang = 'en-US';
-  return lang;
+  ko: {
+    translation: langKo
+  }
 };
 
 i18n
-  .use(detector)
   .use(initReactI18next)
   .init({
-    resources: resource,
-    // 초기 설정 언어
-    lng: getThisLang(),
-    fallbackLng: {
-      'en-US': ['en-US'],
-      default: ['ko-KR'],
-    },
-    debug: true,
-    defaultNS: 'translation',
-    ns: 'translation',
-    keySeparator: '.',
+    resources,
+    lng: "ko", // 기본 설정 언어, 'cimode'로 설정할 경우 키 값으로 출력된다.
+    fallbackLng: "en", // 번역 파일에서 찾을 수 없는 경우 기본 언어
     interpolation: {
-      escapeValue: false,
-    },
-    react: {
-      useSuspense: false,
-    },
+      escapeValue: false
+    }
   });
 
-const init = lang => {
-  i18n.use(initReactI18next).init({
-    resources: resource,
-    fallbackLng: 'en',
-    debug: true,
-    interpolation: {
-      escapeValue: true,
-      prefix: '{',
-      suffix: '}',
-    },
-    lng: lang,
-  });
-};
-
-export default init;
+export default i18n;
