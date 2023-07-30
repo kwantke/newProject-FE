@@ -34,7 +34,8 @@ export const loginDB = createAsyncThunk(
   'user/logIn'
   ,async (data, thunkAPI) => {
     try {
-      const response = await logIn(data);
+      //const response = await logIn(data);
+      const response = await logIn();
       if(response) {
         const USER_TOKEN = response.data.token;
 
