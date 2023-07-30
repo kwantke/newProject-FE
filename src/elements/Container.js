@@ -7,22 +7,22 @@ const Container = props => {
     ,padding
   };
 
-  return <ContainerWrap {...styles}></ContainerWrap>
+  return <ContainerWrap {...styles}>{children}</ContainerWrap>
 
 };
 
 Container.defaultProps = {
-  padding: '66px 24px 0 24px'
-  ,height: '100%'
+  padding: '66px 24px 0 24px',
+  height: '100%',
 };
 
 const ContainerWrap = styled.div`
   position: relative;
   max-width: 768px;
   height: ${({ height }) => height};
-  mid-hegith: ${({ height }) => height || '100%'};
+  mid-height: ${({ height }) => height || '100%'};
   margin: 0 auto;
-  padding: ${({ padding }) => padding || '0 24px'}; 
+  padding: ${({ padding }) => padding || '0 24px'};
 `;
 
 export default Container

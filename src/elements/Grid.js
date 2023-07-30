@@ -1,53 +1,76 @@
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/prop-types */
 import React from 'react';
-import styled from "styled-components";
+import styled from 'styled-components';
 
-
-export const Grid = props => {
+const Grid = props => {
   const {
-    id
-    ,justify
-    ,justifyContent
-    ,isFlex
-    ,flex
-    ,flexFlow
-    ,direction
-    ,width
-    ,height
-    ,margin
-    ,padding
-    ,bg
-    ,wrap
-    ,border
-    ,borderBottom
-    ,_onClick
-    ,children
-    ,position
-    ,zIndex
-    ,cursor
-  } = props
+    id,
+    justify,
+    justifyContent,
+    /*isFlex,*/
+    flex,
+    flexFlow,
+    direction,
+    width,
+    height,
+    margin,
+    padding,
+    bg,
+    wrap,
+    border,
+    borderBottom,
+    _onClick,
+    children,
+    position,
+    zIndex,
+    cursor,
+  } = props;
 
   const styles = {
-    id
-    ,justify
-    ,justifyContent
-    ,isFlex
-    ,flex
-    ,flexFlow
-    ,direction
-    ,width
-    ,height
-    ,margin
-    ,padding
-    ,bg
-    ,wrap
-    ,border
-    ,borderBottom
-    ,_onClick
-    ,children
-    ,position
-    ,zIndex
-    ,cursor
+    id,
+    justify,
+    justifyContent,
+    /*isFlex,*/
+    flex,
+    flexFlow,
+    direction,
+    width,
+    height,
+    margin,
+    padding,
+    bg,
+    wrap,
+    border,
+    borderBottom,
+    position,
+    zIndex,
+    cursor,
   };
+
+  if (justify === 'space-between') {
+    return (
+      <BetweenGrid {...styles} onClick={_onClick}>
+        {children}
+      </BetweenGrid>
+    );
+  }
+
+  if (justify === 'center') {
+    return (
+      <CenterGrid {...styles} onClick={_onClick}>
+        {children}
+      </CenterGrid>
+    );
+  }
+
+  if (justify === 'flex-end') {
+    return (
+      <EndGrid {...styles} onClick={_onClick}>
+        {children}
+      </EndGrid>
+    );
+  }
 
   return (
     <DefaultGrid {...styles} onClick={_onClick}>
@@ -57,18 +80,20 @@ export const Grid = props => {
 };
 
 Grid.defaultProps = {
-  justify: 'flex-start'
-  ,isFlex: false
-  ,direction: 'row'
-  ,width: 'auto'
-  ,height: 'auto'
-  ,margin: 0
-  ,padding: 0
-  ,bg: 'transparent'
-  ,border: 'none'
-  ,position: 'relative'
-  ,borderBottom: 'none'
-  ,_onClick: () => {}
+  justify: 'flex-start',
+  /*isFlex: false,*/
+  flex: false,
+  direction: 'row',
+  width: 'auto',
+  height: 'auto',
+  margin: 0,
+  padding: 0,
+  bg: 'transparent',
+  border: 'none',
+  position: 'relative',
+  /*borderBottom: 'none',*/
+  // cursor: false,
+  _onClick: () => {},
 };
 
 const DefaultGrid = styled.div`
@@ -89,9 +114,57 @@ const DefaultGrid = styled.div`
   flex-wrap: wrap;
   ${props => (props.zIndex ? ` z-index:${props.zIndex}` : '')};
   ${props =>
-    (props.justifyContent ? ` justify-content:${props.justifyContent}` : '')};
-  ${props => (props.cursor ? ` cursor:pointer` : '')}; 
+  props.justifyContent ? `justify-content:${props.justifyContent}` : ''};
+  ${props => (props.cursor ? `cursor:pointer` : '')};
 `;
-
-
+const BetweenGrid = styled.div`
+  ${props =>
+  props.justify
+    ? `display:flex; justify-content:space-between; align-items:center`
+    : ''};
+  ${props => (props.flex ? `flex:1` : '')};
+  ${props => (props.direction ? ` flex-direction:${props.direction}` : '')};
+  width: ${props => props.width};
+  height: ${props => props.height};
+  margin: ${props => props.margin};
+  padding: ${props => props.padding};
+  background-color: ${props => props.bg};
+  border: ${props => props.border};
+  ${props => props.wrap && `flex-wrap:wrap`};
+  ${props => (props.cursor ? `cursor:pointer` : '')};
+`;
+const CenterGrid = styled.div`
+  ${props =>
+  props.justify
+    ? `display:flex; justify-content:center; align-items:center`
+    : ''};
+  ${props => (props.flex ? `flex:1` : '')};
+  ${props => (props.direction ? ` flex-direction:${props.direction}` : '')};
+  width: ${props => props.width};
+  height: ${props => props.height};
+  margin: ${props => props.margin};
+  padding: ${props => props.padding};
+  background-color: ${props => props.bg};
+  border: ${props => props.border};
+  /*border-bottom: ${({ borderBottom }) => borderBottom || ''};*/
+  position: ${props => props.position};
+  ${props => props.wrap && `flex-wrap:wrap`};
+  ${props => (props.cursor ? `cursor:pointer` : '')};
+`;
+const EndGrid = styled.div`
+  ${props =>
+  props.justify
+    ? `display:flex; justify-content:flex-end; align-items:center`
+    : ''};
+  ${props => (props.flex ? `flex:1` : '')};
+  ${props => (props.direction ? ` flex-direction:${props.direction}` : '')};
+  width: ${props => props.width};
+  height: ${props => props.height};
+  margin: ${props => props.margin};
+  padding: ${props => props.padding};
+  background-color: ${props => props.bg};
+  border: ${props => props.border};
+  ${props => props.wrap && `flex-wrap:wrap`};
+  ${props => (props.cursor ? `cursor:pointer` : '')};
+`;
 export default Grid;

@@ -4,7 +4,7 @@ const device = {
   mobile: "@media screen and (max-width:500px)"
 };
 
-const colors = {
+const color = {
   mainColor: '#212529',
   grey1: '#ced4da',
   white: '#fff',
@@ -13,10 +13,18 @@ const colors = {
 const fontSize = {
   normal: "18px"
 }
+
+const fontWeight = {
+  extraBold: 800,
+  semiBold: 600,
+  regular: 400,
+  light: 300,
+}
 const theme = {
   device
-  ,colors
+  ,color
   ,fontSize
+  ,fontWeight
 }
 
 export default theme;
