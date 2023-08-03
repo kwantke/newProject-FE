@@ -1,17 +1,20 @@
 import styled from "styled-components";
+import {Login} from "../../pages/Login"
 const Header = props => {
 
   const {
      _back
     ,_search
+    ,_content
+    ,_onTop
   } = props
 
   return (
     <>
-      <ContentBgArea>
+      {/*<ContentBgArea OnTop={_onTop}>
 
 
-      </ContentBgArea>
+      </ContentBgArea>*/}
     </>
 
   );
@@ -33,3 +36,5 @@ const ContentBgArea = styled.div`
   top: 0;
   background-color: ${props => (props.OnTop ? '' :  '#fff')};
 `;
+
+export default Header;
