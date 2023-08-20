@@ -6,7 +6,7 @@ import {
   ,logIn
 } from '../../shared/api/userApi'
 import {setCommonModalOn} from "../modules/commonSlice";
-//회원등록
+// 회원등록
 export const addUserDB = createAsyncThunk(
   'user/addUser'
   ,async (data, thunkAPI) => {
@@ -29,15 +29,15 @@ export const addUserDB = createAsyncThunk(
     }
   }
 );
-
+// 로그인
 export const loginDB = createAsyncThunk(
-  'user/logIn'
+  'user/login'
   ,async (data, thunkAPI) => {
     try {
       //const response = await logIn(data);
-      const response = await logIn();
+      const response = await logIn(data);
       if(response) {
-        const USER_TOKEN = response.data.token;
+        const accessToken = response.data.accessToken;
 
       }
     } catch (err) {
