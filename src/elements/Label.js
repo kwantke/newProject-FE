@@ -36,22 +36,22 @@ const Label = props => {
 };
 
 Label.defaultProps = {
-  flex: false,
+  /*flex: false,*/
   margin: '0px',
   padding: '0px',
   fontSize: `${theme.fontSize.normal}`,
   color: `${theme.color.mainColor}`,
-  bold: false,
+  /*bold: false,*/
   required: false,
 };
 
 const LabelWrap = styled.label`
-  ${props => props.flex && `flex:1`};
+ /* ${props => props.flex && `flex:1`};*/
   ${props => (props.margin ? `margin:${props.margin}` : '')};
   ${props => (props.padding ? `padding:${props.padding}` : '')};
   ${props => (props.fontSize ? `font-size:${props.fontSize}` : '')};
   ${props => (props.color ? `color:${props.color}` : '')};
-  font-weight: ${props => (props.bold ? `600` : `400`)};
+  /*font-weight: ${props => (props.bold ? `600` : `400`)};*/
   ${props => props.cursor && `cursor:pointer`};
 `;
 const LabelForm = styled.label`

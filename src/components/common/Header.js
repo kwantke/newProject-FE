@@ -1,4 +1,3 @@
-/* eslint-disable */
 import styled from "styled-components";
 import {Login} from "../../pages/Login"
 const Header = props => {

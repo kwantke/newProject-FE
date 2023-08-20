@@ -1,4 +1,3 @@
-/* eslint-disable */
 import Header from "../components/common/Header";
 import {useTranslation} from "react-i18next";
 import Container from "../elements/Container";
@@ -10,19 +9,13 @@ import {useState} from "react";
 import {xcircle} from "../images";
 import {useDispatch} from "react-redux";
 import {loginDB} from "../redux/async/user";
-
-import {useNavigate} from "react-router-dom";
-
-/* Elements */
 import Label from "../elements/Label";
 import Input from "../elements/Input";
 import Text from "../elements/Text";
-import Button from "../elements/Button";
 
 const Login = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const [loginInfo, setLoginInfo] = useState({
     email: ''
     ,password: ''
@@ -129,14 +122,6 @@ const Login = () => {
               <KakaoIcon/>
             </IconArea>{t('loginPage.kakaoLogin')}
           </KakaoButton>
-          <Grid isFlex margin="24px 0 0 0" justify="center">
-            <Text fontSize="13px" color="#A3A6AA" margin="0 12px 0 0">
-              {t('loginPage.infoText')}
-            </Text>
-            <Button color="#A3A6AA" bold={true} _onClick={()=>navigate('/signUp')}>
-              {t('loginPage.register')}
-            </Button>
-          </Grid>
         </BottomWrap>
       </Container>
     </>

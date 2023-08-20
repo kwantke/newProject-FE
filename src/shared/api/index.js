@@ -12,8 +12,7 @@ api.interceptors.request.use(async config =>{
   config.headers['X-Requested-With'] = 'XMLHttpRequest';
   config.headers.Accept = '*/*';
 
-  config.headers.access_token = cookies.get("accessToken");
-  config.headers.refresh_token = cookies.get("refreshToken");
+  config.headers.Authorization = cookies.get("USER_TOKEN");
   return config;
 });
 
@@ -23,7 +22,7 @@ api.interceptors.response.use(
   },
   (error) => {
     if(error.response.status === 401) {
-      deleteCookie("accessToken");
+      deleteCookie("USER_TOKEN");
       alert("로그인이 만료되었습니다.")
       window.location.href = "localhost:3000"
     }
