@@ -82,7 +82,7 @@ const Grid = props => {
 Grid.defaultProps = {
   justify: 'flex-start',
   /*isFlex: false,*/
-  flex: false,
+  /*flex: false,*/
   direction: 'row',
   width: 'auto',
   height: 'auto',
