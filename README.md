@@ -14,6 +14,7 @@ npm i react-i18next i18next
 npm i redux react-redux
 npm install @reduxjs/toolkit
 npm install redux-persist //새로고침해도 state 유지
+npm install -D eslint
 ### `npm start`
 
 Runs the app in the development mode.\
