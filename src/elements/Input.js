@@ -42,8 +42,8 @@ const Input = props => {
         type={type}
         name={name}
         value={value}
-        onChange={_onChange}
         placeholder={placeholder}
+        onChange={_onChange}
         onKeyPress={e => e.key === 'Enter' && _onSubmit(e)}
         {...styles}
       />
