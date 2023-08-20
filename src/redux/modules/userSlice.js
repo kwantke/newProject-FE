@@ -14,7 +14,7 @@ const userSlice = createSlice({
   ,initialState
   ,reducers: {
     logOut: (state, { payload }) => {
-      deleteCookie('USER_TOKEN');
+      deleteCookie('accessToken');
       state.userInfo = {};
       state.isLogin = false;
     }
