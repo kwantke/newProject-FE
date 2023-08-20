@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import styled from 'styled-components';
 import theme from '../styles/theme';
@@ -44,35 +46,32 @@ export const Text = props => {
 Text.defaultProps = {
   fontSize: `${theme.fontSize.normal}`,
   /*semibold: false,*/
-  bold: false,
+  /*bold: false,*/
   color: `${theme.color.mainColor}`,
   children: '',
   others: '',
   margin: null,
-  textAlign: false,
-  border: false,
+  /*textAlign: false,*/
+  /*border: false,*/
   lineHeight: '1.5',
   letterSpacing: 1,
 };
 
 const ElText = styled.div`
   font-size: ${props => props.fontSize};
-  font-weight: ${props => props.bold};
+
   color: ${props => props.color};
-  font-weight: ${props =>
-  props.bold
-    ? `${theme.fontWeight.extraBold}`
-    : `${theme.fontWeight.regular}`};
-  ${props => props.textAlign && `text-align: ${props.textAlign}`};
+  
+  ${props => props.textAlign2 && `text-align: center`};
   ${props => props.others};
   ${props => (props.margin ? `margin: ${props.margin}` : '')};
-  ${props => (props.border ? `border-bottom: ${props.border}` : '')};
+  
   line-height: ${({ lineHeight }) => lineHeight || '1.5'};
   letter-spacing: ${({ letterSpacing }) => letterSpacing || '1'};
 `;
 const Title16 = styled.p`
   font-size: 16px;
-  font-weight: ${props => (props.bold ? `600` : '400')};
+
   line-height: ${({ lineHeight }) => lineHeight || '22px'};
   letter-spacing: ${({ letterSpacing }) => letterSpacing || '-0.0041em'};
   color: ${({ color }) => color || '#3E4042'};
