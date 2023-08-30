@@ -8,9 +8,9 @@ export const api = axios.create({
 
 
 api.interceptors.request.use(async config =>{
-  config.headers['content-type'] = 'application/jso; charset=utf-8';
+  /*config.headers['content-type'] = 'application/jso; charset=utf-8';
   config.headers['X-Requested-With'] = 'XMLHttpRequest';
-  config.headers.Accept = '*/*';
+  config.headers.Accept = '*!/!*';*/
 
   config.headers.access_token = cookies.get("accessToken");
   config.headers.refresh_token = cookies.get("refreshToken");
