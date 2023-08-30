@@ -7,24 +7,24 @@ import theme from '../styles/theme';
 const Label = props => {
   const {
     type,
-    /*flex,*/
+    flex,
     margin,
     padding,
     fontSize,
     color,
     children,
     required,
-    /*bold,*/
+    bold,
     marginBottom,
     cursor,
   } = props;
   const styles = {
-    /*flex,*/
+    flex,
     margin,
     padding,
     fontSize,
     color,
-    /*bold,*/
+    bold,
     required,
     marginBottom,
     cursor,

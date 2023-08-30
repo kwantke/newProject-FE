@@ -15,16 +15,16 @@ export const addUserDB = createAsyncThunk(
       if(response) {
         const modalParams = {
           title: '회원가입에 성공하셨습니다'
-          ,goPage: '/login'
+          ,goPage: '/'
         };
         thunkAPI.dispatch(setCommonModalOn(modalParams));
       }
     } catch (err) {
-      /*const modalParams = {
+      const modalParams = {
         title: `${err.response.data.errMsg}`
-      };*/
-      //thunkAPI.dispatch();
-      return thunkAPI.rejectWithValue('<<',err)
+      };
+      thunkAPI.dispatch(setCommonModalOn(modalParams));
+      return thunkAPI.rejectWithValue('<<',err);
 
     }
   }

@@ -1,5 +1,5 @@
 /* eslint-disable */
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useTranslation} from "react-i18next";
 import Container from "../elements/Container";
 import Grid from "../elements/Grid";
@@ -11,18 +11,23 @@ import {emailCheck} from "../shared/emailCheck";
 import {xcircle} from "../images/index";
 import Text from "../elements/Text";
 import Button from "../elements/Button";
-
+import {checkEmail} from "../shared/api/userApi";
+import {addUserDB} from "../redux/async/user";
+import CommonModal from "../components/common/CommonModal";
 export default function Signup() {
 
   const dispatch = useDispatch();
   const { t } = useTranslation()
-
+  const commonModal = useSelector(state => state.commonModal.modalStatus);
   const [userInfo, setUserInfo] = useState({
     email: '',
     password:'',
     passwordCheck:'',
     nickname:''
   });
+
+  // 모달 on/off 상태를 redux에서 관리
+  const modalStatus = useSelector(state => state.user.modalStatus);
 
   /* 남자, 여자 상태를 useState를 통해 관리*/
   const [maleFemale, setMaleFemale] = useState(null);
@@ -31,7 +36,7 @@ export default function Signup() {
   const [buttonStatus, setButtonStatus] = useState(false);
 
   /* 닉네임이 존재하는지 안하는지 유무, 존재하면 true, 존재하지 않으면 false */
-  const [nicknameDuplicate, setNicknameDuplicate] = useState(null)
+  const [emailDuplicateCheck, setemailDuplicateCheck] = useState(false);
 
   /* Error 메시지 state*/
   const [emailError, setEmailError] = useState('');
@@ -42,44 +47,45 @@ export default function Signup() {
   // 모든 input을 하나의 state로 관리
   const onChange = e => {
     setUserInfo({...userInfo, [e.target.name]: e.target.value});
-    if(userInfo.nickname) {
+    if(userInfo.email) {
       setButtonStatus(true);
     }
   };
+
 
   //서버에 전달할 유저 정보
   const userInfoDB = {
     email: userInfo.email,
     password: userInfo.password,
     nickname: userInfo.nickname,
-    maleYN: maleFemale,
+    //maleYN: maleFemale,
   }
 
-  /* 닉네임 중복 확인 */
+  /* ID 중복 확인 */
   const userCheck = async () => {
-    const nickCheck = { nickname: userInfo.nickname };
-    /* 닉네임값이 빈값 일떄*/
-    if(userInfo.nickname === '') {
+    if(!buttonStatus) return false;
+    const email = { email: userInfo.email };
+    /* 이메일 값이 빈값 일떄*/
+    if(userInfo.email === '') {
       setButtonStatus(false);
-      return setNicknameError(t('signUpPage.nickNameError.0'));
+      return setEmailError(t('signUpPage.idErrorMessage.0'));
     }
-    if(userInfo.nickname.length < 2) {
+    if(!emailCheck(userInfoDB.email)){
       setButtonStatus(false);
-      return setNicknameError(t('signUpPage.nickNameError.1'))
+      return setEmailError(t('signUpPage.idErrorMessage.1'));
     }
-    if (userInfo.nickname.length > 12) {
-      setButtonStatus(false);
-      return setNicknameError(t('signUpPage.nickNameError.2'));
-    }
+
     try {
-      const response = await nicknameCheck(nickCheck);
+      const response = await checkEmail(email);
       if(response) {
-        const result = response.data.msg;
-        setNicknameDuplicate(result);
-        if(result === true) {
-          setNicknameError(t('signUpPage.nickNameError.4'));
+        const result = response.data.message;
+
+        if(result === "Y") {
+          setemailDuplicateCheck(false);
+          setEmailError(t('signUpPage.idErrorMessage.3'));
         } else {
-          setNicknameError(t('signUpPage.nickNameError.5'))
+          setemailDuplicateCheck(true);
+          setEmailError(t('signUpPage.idErrorMessage.4'))
         }
       }
     } catch(err) {
@@ -100,9 +106,14 @@ export default function Signup() {
       return;
     }
     if(!emailCheck(userInfoDB.email)){
-        setEmailError(t('signUpPage.idErrorMessage.1'))
+        setEmailError(t('signUpPage.idErrorMessage.1'));
       return;
     }
+    if(!emailDuplicateCheck) {
+      window.alert('이메일 중복체크를 해주세요!');
+      return;
+    }
+
     /* 비밀번호 체크 */
     if(userInfo.password.length !== 0){
       setPassError('');
@@ -125,22 +136,36 @@ export default function Signup() {
     }
     /* 비밀번호 비교 체크 */
     if(userInfo.password === userInfo.passwordCheck){
-      setPassconfirmError();
+      setPassconfirmError('');
     }
     if(userInfo.password !== userInfo.passwordCheck) {
       setPassconfirmError(t('signUpPage.passconfirmMessage.1'))
       return;
     }
+
+    if(userInfo.nickname.length < 2) {
+      setNicknameError(t('signUpPage.nickNameError.1'));
+      return;
+    }
+    if (userInfo.nickname.length > 12) {
+      setNicknameError(t('signUpPage.nickNameError.2'));
+      return;
+    }
+
+    dispatch(addUserDB(userInfoDB));
+
+
   }
   return (
     <>
+      {commonModal && <CommonModal />}
       <Container padding="66px 0 0 0">
         <Grid padding="42px 20px 0 20px">
           <Wrap>
             <Label type="form" required>
               {t('signUpPage.signUpEmail')}
             </Label>
-            <Div>
+            {/*<Div>*/}
               <Input
                 inputType="form"
                 type="text"
@@ -150,6 +175,39 @@ export default function Signup() {
                 _onSubmit={submitUserInfo}
                 praceholder={t('signUpPage.placeholder.0')}
               />
+              <AbsolDiv>
+                {buttonStatus === false ? (
+                  <Button
+                    type="tag"
+                    bg="#fff"
+                    color="#C4C4C4"
+                    border="1px solid #C4C4C4"
+                    _onClick={userCheck}
+                  >
+                    {t('signUpPage.duplicateBtn')}
+                  </Button>
+                ) : (
+                  <Button
+                    type="tag"
+                    bg="black"
+                    color="#fff"
+                    border="1px solid #C4C4C4"
+                    _onClick={userCheck}
+                  >
+                    {t('signUpPage.duplicateBtn')}
+                  </Button>
+                )}
+              </AbsolDiv>
+              {emailError === t('signUpPage.idErrorMessage.4') ? (
+                <Text color="green" fontSize="12px">
+                  {emailError}
+                </Text>
+              ) : (
+                <Text color="#ff4949" fontSize="12px">
+                  {emailError}
+                </Text>
+              )}
+              {/*
               {userInfo.email !== '' && (
                 <CloseButton
                   src={xcircle}
@@ -158,10 +216,11 @@ export default function Signup() {
                   }}
                 />
               )}
-            </Div>
-            <Text fontSize="12px" color="#ff4949">
+              */}
+           {/* </Div>*/}
+            {/*<Text fontSize="12px" color="#ff4949">
               {emailError}
-            </Text>
+            </Text>*/}
           </Wrap>
           <Wrap>
             <Label type="form" required>
@@ -226,29 +285,18 @@ export default function Signup() {
               _onSubmit={submitUserInfo}
               placeholder={t('signUpPage.placeholder.3')}
             />
-            <AbsolDiv>
-              {buttonStatus === false ? (
-                <Button
-                  type="tag"
-                  bg="#fff"
-                  color="#C4C4C4"
-                  border="1px solid #C4C4C4"
-                  _onClick={userCheck}
-                >
-                  {t('signUpPage.duplicateBtn')}
-                </Button>
-              ) : (
-                <Button
-                  type="tag"
-                  bg="black"
-                  color="#fff"
-                  border="1px solid #C4C4C4"
-                  _onClick={userCheck}
-                >
-                  {t('signUpPage.duplicateBtn')}
-                </Button>
-              )}
-            </AbsolDiv>
+            {userInfo.nickname !== '' && (
+              <CloseButton
+                src={xcircle}
+                onClick={()=> {
+                  setUserInfo({...userInfo, nickname: ''});
+                }}
+              />
+            )}
+            <Text fontSize="12px" color="#ff4949">
+              {nicknameError}
+            </Text>
+{/*
             {nicknameError === t('signUpPage.nickNameError.5') ? (
               <Text color="green" fontSize="12px">
                 {nicknameError}
@@ -258,13 +306,24 @@ export default function Signup() {
                 {nicknameError}
               </Text>
             )}
+            */}
           </Wrap>
+
         </Grid>
+        <BottomWrap>
+          <Button type="fullSizeBlack" _onClick={submitUserInfo}>
+            {t('signUpPage.register')}
+          </Button>
+        </BottomWrap>
       </Container>
     </>
   )
 
 }
+const BottomWrap = styled.div`
+  padding: 40px 20px;
+  width: 100%;
+`
 
 const Wrap = styled.div`
   position: relative;

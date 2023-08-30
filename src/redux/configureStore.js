@@ -1,6 +1,6 @@
 import {combineReducers} from "redux";
 import {configureStore} from "@reduxjs/toolkit";
-
+/* eslint-disable */
 /* slice module */
 import userSlice from "./modules/userSlice";
 import commonSlice from "./modules/commonSlice";
@@ -8,7 +8,7 @@ import commonSlice from "./modules/commonSlice";
 /* Reducer combine */
 const reducer = combineReducers({
   user: userSlice.reducer,
-  common: commonSlice,
+  commonModal: commonSlice.reducer
 });
 
 const store = configureStore({

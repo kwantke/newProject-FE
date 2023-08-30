@@ -64,7 +64,7 @@ const Login = () => {
       <Container padding="60px 0 0 0">
         <Grid padding="42px 20px 0 20px">
           <Wrap>
-            <Label type="form">{t('loginPage.loginEmail')}</Label>
+            <Label type="form" flex={false}>{t('loginPage.loginEmail')}</Label>
             <Input
               inputType="form"
               type="text"

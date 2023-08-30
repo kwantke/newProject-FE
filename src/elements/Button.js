@@ -1,6 +1,6 @@
 /* eslint-disable */
 import styled from "styled-components";
-
+import theme from '../styles/theme';
 
 export default function Button(props) {
 
@@ -31,6 +31,16 @@ export default function Button(props) {
     bold,
     bg,
     focus
+  }
+
+  if(type === 'fullSizeBlack') {
+    return (
+      <>
+        <FullSizeBlack {...styles} onClick={_onClick}>
+          {children}
+        </FullSizeBlack>
+      </>
+    )
   }
 
   if(type === 'tag') {
@@ -64,6 +74,16 @@ Button.defaultProps = {
   border: 'none',
   _onClick: () => {}
 };
+
+const FullSizeBlack = styled.button`
+  width: 100%;
+  height: 52px;
+  line-height: 52px;
+  font-size: 16px;
+  background-color: ${theme.color.mainColor};
+  color: ${theme.color.white};
+  border: 1px solid ${theme.color.mainColor};
+`;
 
 const DefaultButton = styled.button`
    width: ${props => props.width};
