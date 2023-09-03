@@ -7,7 +7,7 @@ import Label from "../elements/Label";
 import styled from "styled-components";
 import Input from "../elements/Input";
 import {useState} from "react";
-import {emailCheck} from "../shared/emailCheck";
+import {checkForm, passwordCheck} from "../shared/checkForm";
 import {xcircle} from "../images/index";
 import Text from "../elements/Text";
 import Button from "../elements/Button";
@@ -34,6 +34,8 @@ export default function Signup() {
 
   /* 버튼 활성화/비활성화 state */
   const [buttonStatus, setButtonStatus] = useState(false);
+  const [checkEmailStatus, setCheckEmailStatus] = useState(false);
+  const [checkedEmail, setCheckedEmail] = useState('');
 
   /* 닉네임이 존재하는지 안하는지 유무, 존재하면 true, 존재하지 않으면 false */
   const [emailDuplicateCheck, setemailDuplicateCheck] = useState(false);
@@ -47,45 +49,42 @@ export default function Signup() {
   // 모든 input을 하나의 state로 관리
   const onChange = e => {
     setUserInfo({...userInfo, [e.target.name]: e.target.value});
-    if(userInfo.email) {
+    if(!(userInfo.email === checkedEmail)) {
       setButtonStatus(true);
+      setEmailError('');
     }
   };
 
 
-  //서버에 전달할 유저 정보
-  const userInfoDB = {
-    email: userInfo.email,
-    password: userInfo.password,
-    nickname: userInfo.nickname,
-    //maleYN: maleFemale,
-  }
+
 
   /* ID 중복 확인 */
   const userCheck = async () => {
     if(!buttonStatus) return false;
-    const email = { email: userInfo.email };
+    const requestEmail = { email: userInfo.email };
     /* 이메일 값이 빈값 일떄*/
     if(userInfo.email === '') {
       setButtonStatus(false);
       return setEmailError(t('signUpPage.idErrorMessage.0'));
     }
-    if(!emailCheck(userInfoDB.email)){
+    if(!checkForm(userInfo.email)){
       setButtonStatus(false);
       return setEmailError(t('signUpPage.idErrorMessage.1'));
     }
 
     try {
-      const response = await checkEmail(email);
+      const response = await checkEmail(requestEmail);
       if(response) {
         const result = response.data.message;
-
+        // 기존 이메일이 있을 경우 Y, 없으면 N
         if(result === "Y") {
           setemailDuplicateCheck(false);
           setEmailError(t('signUpPage.idErrorMessage.3'));
         } else {
           setemailDuplicateCheck(true);
           setEmailError(t('signUpPage.idErrorMessage.4'))
+
+          setCheckedEmail(userInfo.email);
         }
       }
     } catch(err) {
@@ -96,7 +95,13 @@ export default function Signup() {
 
   }
 
-
+  //서버에 전달할 유저 정보
+  const userInfoDB = {
+    email: userInfo.email,
+    password: userInfo.password,
+    nickname: userInfo.nickname,
+    //maleYN: maleFemale,
+  }
   const submitUserInfo = () => {
     if(userInfo.email.length !== 0) {
       setEmailError('');
@@ -105,11 +110,12 @@ export default function Signup() {
       setEmailError(t('signUpPage.idErrorMessage.0'));
       return;
     }
-    if(!emailCheck(userInfoDB.email)){
+    // 이메일 형식 체크
+    if(!checkForm(userInfo.email)){
         setEmailError(t('signUpPage.idErrorMessage.1'));
       return;
     }
-    if(!emailDuplicateCheck) {
+    if(!emailDuplicateCheck || !(userInfo.email === checkedEmail)) {
       window.alert('이메일 중복체크를 해주세요!');
       return;
     }
@@ -126,12 +132,20 @@ export default function Signup() {
       setPassError(t('signUpPage.passErrorMessage.1'))
       return;
     }
+    if(!passwordCheck(userInfo.password)){
+      setPassError(t('signUpPage.passErrorMessage.2'))
+      return;
+    }
     /* 비밀번호 확인 체크 */
     if (userInfo.passwordCheck.length !== 0) {
       setPassError('');
     }
     if (userInfo.passwordCheck === '') {
       setPassconfrimError(t('signUpPage.passconfirmMessage.0'));
+      return;
+    }
+    if(userInfo.password !== userInfo.passwordCheck) {
+      setPassconfirmError(t('signUpPage.passconfirmMessage.1'))
       return;
     }
     /* 비밀번호 비교 체크 */
