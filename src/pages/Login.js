@@ -8,7 +8,7 @@ import styled from "styled-components";
 import { ReactComponent as KakaoIcon } from '../images/kakaoLogin/join_kakao.svg';
 import {useState} from "react";
 import {xcircle} from "../images";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {loginDB} from "../redux/async/user";
 
 import {useNavigate} from "react-router-dom";
@@ -18,6 +18,7 @@ import Label from "../elements/Label";
 import Input from "../elements/Input";
 import Text from "../elements/Text";
 import Button from "../elements/Button";
+import CommonModal from "../components/common/CommonModal";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -29,6 +30,7 @@ const Login = () => {
   });
   const [emailError, setEmailError] = useState('');
   const [passError, setPassError] = useState('');
+  const modalStatus = useSelector(state => state.commonModal.modalStatus);
 
   const onChange = e => {
     setLoginInfo({
@@ -56,10 +58,12 @@ const Login = () => {
     if(userInfo.password.length === 0) {
       return setPassError(t('loginPage.loginerrMessage.1'));
     }
-    dispatch(loginDB(userInfo));
+    dispatch(loginDB({userInfo, navigate}));
+
   }
   return (
     <>
+      {modalStatus && <CommonModal/>}
       <Header _content={t('loginPage.headerSubTitle')}/>
       <Container padding="60px 0 0 0">
         <Grid padding="42px 20px 0 20px">

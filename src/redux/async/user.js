@@ -6,6 +6,10 @@ import {
   ,logIn
 } from '../../shared/api/userApi'
 import {setCommonModalOn} from "../modules/commonSlice";
+import {setCookie} from "../../shared/config/cookie";
+import {useNavigate} from "react-router-dom";
+
+
 // 회원등록
 export const addUserDB = createAsyncThunk(
   'user/addUser'
@@ -19,12 +23,14 @@ export const addUserDB = createAsyncThunk(
         };
         thunkAPI.dispatch(setCommonModalOn(modalParams));
       }
-    } catch (err) {
-      const modalParams = {
-        title: `${err.response.data.errMsg}`
-      };
-      thunkAPI.dispatch(setCommonModalOn(modalParams));
-      return thunkAPI.rejectWithValue('<<',err);
+    } catch (error) {
+      if(error.response.data.errorCode) {
+        const modalParams = {
+          title: `${error.response.data.errorMessage}`,
+        }
+        thunkAPI.dispatch(setCommonModalOn(modalParams));
+      }
+      return thunkAPI.rejectWithValue('<<',error);
 
     }
   }
@@ -33,20 +39,39 @@ export const addUserDB = createAsyncThunk(
 export const loginDB = createAsyncThunk(
   'user/login'
   ,async (data, thunkAPI) => {
-    try {
-      //const response = await logIn(data);
-      const response = await logIn(data);
-      if(response) {
-        const accessToken = response.data.accessToken;
 
+    try {
+
+      const response = await logIn(data.userInfo);
+      if(response) {
+
+        const {
+          accessToken,
+          refreshToken,
+          nickname,
+          myImgUrl
+        } = response.data.data
+
+        setCookie("accessToken",accessToken);
+        setCookie("refreshToken",refreshToken);
+
+        const userInfo = {
+          nickname: nickname,
+          myImgUrl: myImgUrl
+        }
+        data.navigate("/test")
+        //window.location.pathname = "/"
+        return userInfo;
       }
-    } catch (err) {
-      console.log('error ::::::', err.response);
-      const modalParams = {
-        title: `${err.response.data.errMsg}`,
+    } catch (error) {
+      if(error.response.data.errorCode) {
+        const modalParams = {
+          title: `${error.response.data.errorMessage}`,
+        }
+        thunkAPI.dispatch(setCommonModalOn(modalParams));
       }
-      thunkAPI.dispatch(setCommonModalOn(modalParams));
-      return thunkAPI.rejectWithValue('<<',err);
+
+      return thunkAPI.rejectWithValue('<<',error);
     }
   }
 );

@@ -1,4 +1,4 @@
-import {api} from "./index";
+import {api, generalApi} from "./index";
 
 
 //회원가입

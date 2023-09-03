@@ -35,7 +35,7 @@ const userSlice = createSlice({
     },
     [addUserDB.rejected]: (state, action) => {
       const modalParams = {
-        title: `${action.meta.response.data.errdMsg}`
+        title: `${action.meta.response.data.errorMessage}`
       };
       setCommonModalOn(modalParams);
     },
@@ -46,10 +46,13 @@ const userSlice = createSlice({
     },
     // 로그인 실패시
     [loginDB.rejected]: (state, action) => {
-      const modalParams = {
-        title: `${action.meta.response.data.errMsg}`,
-      };
+      /*const modalParams = {
+        title: `${action.meta.response.data.errorMessage}`,
+      }
       setCommonModalOn(modalParams);
+      if(action.meta.response.data.errorCode) {
+
+      }*/
     }
   }
 })
